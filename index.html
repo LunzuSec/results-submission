@@ -166,7 +166,42 @@
             font-size: 1.8rem;
         }
         
-        /* Scrollable Table Container - Mobile Friendly */
+        /* Scrollable Chart Container - NEW */
+        .chart-scroll-container {
+            position: relative;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+        }
+        
+        .chart-scroll-container:active {
+            cursor: grabbing;
+        }
+        
+        .chart-wrapper {
+            min-width: 800px;
+            height: 300px;
+            position: relative;
+        }
+        
+        /* Custom scrollbar for chart */
+        .chart-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .chart-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .chart-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+        
+        /* Scrollable Table Container */
         .table-scroll-container {
             position: relative;
             width: 100%;
@@ -179,7 +214,6 @@
             max-height: 70vh;
         }
         
-        /* Custom scrollbar */
         .table-scroll-container::-webkit-scrollbar {
             height: 8px;
             width: 8px;
@@ -398,8 +432,9 @@
                 min-width: 40px;
             }
             
-            .chart-container {
-                height: 200px;
+            .chart-wrapper {
+                min-width: 600px;
+                height: 250px;
             }
         }
         
@@ -414,6 +449,11 @@
             
             .action-buttons .btn {
                 width: 100%;
+            }
+            
+            .chart-wrapper {
+                min-width: 500px;
+                height: 220px;
             }
         }
         
@@ -457,6 +497,21 @@
             max-width: 200px;
             white-space: normal !important;
             word-break: break-word;
+        }
+        
+        /* Chart hint for mobile */
+        .scroll-hint {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .scroll-hint {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -550,8 +605,14 @@
                             <h2><i class="fas fa-chart-bar"></i> Submissions by Subject</h2>
                         </div>
                         <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="subjectsChart"></canvas>
+                            <!-- Scrollable chart container -->
+                            <div class="chart-scroll-container" id="chartScrollContainer">
+                                <div class="chart-wrapper">
+                                    <canvas id="subjectsChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="scroll-hint">
+                                <i class="fas fa-arrows-alt-h"></i> Swipe left/right to see all subjects
                             </div>
                         </div>
                     </div>
@@ -659,7 +720,6 @@
         function initFooter() {
             updateCopyrightYear();
             updateSystemTime();
-            // Update system time every minute
             setInterval(updateSystemTime, 60000);
         }
         
@@ -696,6 +756,7 @@
         const progressContainer = document.getElementById('progressContainer');
         const loadingProgressBar = document.getElementById('loadingProgressBar');
         const timeElapsedSpan = document.getElementById('timeElapsed');
+        const chartScrollContainer = document.getElementById('chartScrollContainer');
         
         let startTime = null;
         let elapsedInterval = null;
@@ -887,16 +948,16 @@
             updateCharts();
         }
         
-        // Update charts
+        // Update charts with horizontal scrolling support
         function updateCharts() {
             if (!currentReportData) return;
             
-            // Prepare data for subjects chart (top 10)
-            const subjectsData = currentReportData.items.slice(0, 10);
-            const subjectLabels = subjectsData.map(item => item.subject.length > 20 ? item.subject.substring(0, 17) + '...' : item.subject);
-            const subjectTotals = subjectsData.map(item => (item.paper1 || 0) + (item.paper2 || 0) + (item.paper3 || 0));
+            // Prepare data for subjects chart (ALL subjects for scrolling)
+            const allSubjects = currentReportData.items;
+            const subjectLabels = allSubjects.map(item => item.subject.length > 25 ? item.subject.substring(0, 22) + '...' : item.subject);
+            const subjectTotals = allSubjects.map(item => (item.paper1 || 0) + (item.paper2 || 0) + (item.paper3 || 0));
             
-            // Destroy existing charts
+            // Destroy existing chart
             if (subjectsChart) subjectsChart.destroy();
             if (papersChart) papersChart.destroy();
             
@@ -904,7 +965,13 @@
             const subjectsCtx = document.getElementById('subjectsChart').getContext('2d');
             const papersCtx = document.getElementById('papersChart').getContext('2d');
             
-            // Create subjects chart
+            // Calculate chart width based on number of subjects
+            const chartWrapper = document.querySelector('.chart-wrapper');
+            const barWidth = 60;
+            const minWidth = Math.max(800, subjectLabels.length * barWidth);
+            chartWrapper.style.minWidth = minWidth + 'px';
+            
+            // Create subjects chart (bar chart)
             subjectsChart = new Chart(subjectsCtx, {
                 type: 'bar',
                 data: {
@@ -912,26 +979,57 @@
                     datasets: [{
                         label: 'Total Submissions',
                         data: subjectTotals,
-                        backgroundColor: 'rgba(26, 115, 232, 0.7)',
+                        backgroundColor: 'rgba(26, 115, 232, 0.8)',
                         borderColor: '#1a73e8',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        borderRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
                     plugins: {
-                        legend: { position: 'top', labels: { font: { size: 11 } } },
-                        tooltip: { bodyFont: { size: 11 } }
+                        legend: { 
+                            position: 'top', 
+                            labels: { font: { size: 11 } } 
+                        },
+                        tooltip: { 
+                            bodyFont: { size: 11 },
+                            callbacks: {
+                                label: function(context) {
+                                    return `Submissions: ${context.raw}`;
+                                }
+                            }
+                        }
                     },
                     scales: {
-                        y: { beginAtZero: true, ticks: { font: { size: 10 } } },
-                        x: { ticks: { font: { size: 9, rotation: 45, maxRotation: 45 } } }
+                        y: { 
+                            beginAtZero: true, 
+                            ticks: { font: { size: 10 } },
+                            title: {
+                                display: true,
+                                text: 'Number of Submissions',
+                                font: { size: 11 }
+                            }
+                        },
+                        x: { 
+                            ticks: { 
+                                font: { size: 10 },
+                                rotation: 45,
+                                maxRotation: 45,
+                                autoSkip: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Subjects',
+                                font: { size: 11 }
+                            }
+                        }
                     }
                 }
             });
             
-            // Create papers distribution chart
+            // Create papers distribution chart (pie chart)
             papersChart = new Chart(papersCtx, {
                 type: 'pie',
                 data: {
@@ -951,10 +1049,26 @@
                     maintainAspectRatio: true,
                     plugins: {
                         legend: { position: 'bottom', labels: { font: { size: 11 } } },
-                        tooltip: { bodyFont: { size: 11 } }
+                        tooltip: { 
+                            bodyFont: { size: 11 },
+                            callbacks: {
+                                label: function(context) {
+                                    const total = currentReportData.stats.totalPaper1 + currentReportData.stats.totalPaper2 + currentReportData.stats.totalPaper3;
+                                    const percentage = ((context.raw / total) * 100).toFixed(1);
+                                    return `${context.label}: ${context.raw} (${percentage}%)`;
+                                }
+                            }
+                        }
                     }
                 }
             });
+            
+            // Auto-scroll to show most data-rich area (optional)
+            if (chartScrollContainer && subjectLabels.length > 10) {
+                setTimeout(() => {
+                    chartScrollContainer.scrollLeft = chartScrollContainer.scrollWidth / 3;
+                }, 100);
+            }
         }
         
         // Download PDF
@@ -1039,6 +1153,40 @@
         teacherCodeInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') login();
         });
+        
+        // Enable drag scrolling for chart container
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        
+        if (chartScrollContainer) {
+            chartScrollContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.pageX - chartScrollContainer.offsetLeft;
+                scrollLeft = chartScrollContainer.scrollLeft;
+                chartScrollContainer.style.cursor = 'grabbing';
+            });
+            
+            chartScrollContainer.addEventListener('mouseleave', () => {
+                isDragging = false;
+                chartScrollContainer.style.cursor = 'grab';
+            });
+            
+            chartScrollContainer.addEventListener('mouseup', () => {
+                isDragging = false;
+                chartScrollContainer.style.cursor = 'grab';
+            });
+            
+            chartScrollContainer.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const x = e.pageX - chartScrollContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                chartScrollContainer.scrollLeft = scrollLeft - walk;
+            });
+            
+            chartScrollContainer.style.cursor = 'grab';
+        }
     </script>
 </body>
 </html>
