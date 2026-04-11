@@ -217,9 +217,11 @@
     
     <script>
         // ============================================
-        // CONFIGURATION - IMPORTANT: UPDATE THIS URL
+        // IMPORTANT: REPLACE WITH YOUR ACTUAL WEB APP URL
         // ============================================
-        // Replace with your Google Apps Script Web App URL
+        // Get your Web App URL from Google Apps Script deployment
+        // It should look like: https://script.google.com/macros/s/ABC123xyz/exec
+        
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSdL3OC7QSc2z5Eis47q6Q7dKQzE12eBaqB-i67igJmF26mzm1empfQUmQ03QdwSPkwQ/exec";
         
         // Get DOM elements
@@ -254,15 +256,6 @@
         function updateProgress(percent, message) {
             progressBar.style.width = percent + '%';
             statusMessage.textContent = message;
-            
-            // Update progress bar color based on percentage
-            if (percent < 30) {
-                progressBar.style.background = '#1a73e8';
-            } else if (percent < 70) {
-                progressBar.style.background = '#ffc107';
-            } else {
-                progressBar.style.background = '#28a745';
-            }
         }
         
         // Function to make API call to Google Apps Script
@@ -270,6 +263,8 @@
             try {
                 // Build the URL with parameters
                 const url = `${APPS_SCRIPT_URL}?action=${action}&teacherCode=${encodeURIComponent(teacherCode)}&t=${Date.now()}`;
+                
+                console.log('Calling API:', url);
                 
                 const response = await fetch(url, {
                     method: 'GET',
@@ -284,6 +279,7 @@
                 }
                 
                 const data = await response.json();
+                console.log('API Response:', data);
                 return data;
                 
             } catch (error) {
@@ -350,12 +346,11 @@
             }, 500);
             
             try {
-                // Step 1: Verify teacher code
-                updateProgress(10, 'Verifying teacher credentials...');
+                // Step 1: Verify and generate PDF
+                updateProgress(20, 'Verifying teacher credentials...');
                 await new Promise(resolve => setTimeout(resolve, 500));
                 
-                // Step 2: Generate PDF
-                updateProgress(30, 'Fetching examination data...');
+                updateProgress(40, 'Fetching examination data...');
                 
                 // Call the Apps Script to generate PDF
                 const result = await callAppsScript('generatePDF', teacherCode);
@@ -417,19 +412,11 @@
             }
         });
         
-        // Test connection on page load
-        async function testConnection() {
-            try {
-                const testResult = await callAppsScript('test', 'test');
-                console.log('Connection successful:', testResult);
-            } catch (error) {
-                console.warn('Connection test failed:', error);
-                showMessage('⚠️ Unable to connect to the server. Please check your internet connection and refresh the page.', 'error');
-            }
+        // Check if URL is configured
+        if (APPS_SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbxSdL3OC7QSc2z5Eis47q6Q7dKQzE12eBaqB-i67igJmF26mzm1empfQUmQ03QdwSPkwQ/exec')) {
+            showMessage('⚠️ System not configured. Please contact the administrator.', 'error');
+            generateBtn.disabled = true;
         }
-        
-        // Uncomment to test connection on load
-        // testConnection();
     </script>
 </body>
 </html>
