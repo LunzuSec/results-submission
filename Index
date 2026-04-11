@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunzu Secondary School - Examination Report System</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #1557b0;
+            --light-gray: #f8f9fa;
+            --dark-gray: #6c757d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .card-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .card-header p {
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .card-body {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+        
+        .checkbox-group {
+            margin: 20px 0;
+        }
+        
+        .btn-generate {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+        
+        .btn-generate:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-generate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+        
+        .status-message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 25px;
+            }
+            
+            .card-header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chalkboard-teacher" style="font-size: 48px; margin-bottom: 15px;"></i>
+                <h1>Lunzu Secondary School</h1>
+                <p>Examination Department - Results Submission System</p>
+            </div>
+            
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> 
+                    Enter your teacher code to generate the examination submission summary report.
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacherCode">
+                        <i class="fas fa-key"></i> Teacher Code:
+                    </label>
+                    <input type="password" id="teacherCode" class="form-control" 
+                           placeholder="Enter your unique teacher code" autocomplete="off">
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="showPassword">
+                    <label for="showPassword" style="margin-left: 10px; font-weight: normal;">
+                        <i class="fas fa-eye"></i> Show Teacher Code
+                    </label>
+                </div>
+                
+                <button id="generateBtn" class="btn-generate">
+                    <i class="fas fa-download"></i> Generate & Download Report
+                </button>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <div class="status-message" id="statusMessage"></div>
+                </div>
+                
+                <div id="message"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 Lunzu Secondary School - Examination Department</p>
+            <p>Secure system for authorized teachers only</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ============================================
+        // YOUR GOOGLE APPS SCRIPT WEB APP URL
+        // ============================================
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSdL3OC7QSc2z5Eis47q6Q7dKQzE12eBaqB-i67igJmF26mzm1empfQUmQ03QdwSPkwQ/exec";
+        
+        // Get DOM elements
+        const teacherCodeInput = document.getElementById('teacherCode');
+        const showPasswordCheckbox = document.getElementById('showPassword');
+        const generateBtn = document.getElementById('generateBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const statusMessage = document.getElementById('statusMessage');
+        const messageDiv = document.getElementById('message');
+        
+        // Show/hide password
+        showPasswordCheckbox.addEventListener('change', function() {
+            teacherCodeInput.type = this.checked ? 'text' : 'password';
+        });
+        
+        // Function to show message
+        function showMessage(text, type = 'error') {
+            messageDiv.innerHTML = `
+                <div class="alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                    ${text}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            // Auto scroll to message
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Function to update progress
+        function updateProgress(percent, message) {
+            progressBar.style.width = percent + '%';
+            statusMessage.textContent = message;
+        }
+        
+        // Function to make API call to Google Apps Script
+        async function callAppsScript(action, teacherCode) {
+            try {
+                // Build the URL with parameters
+                const url = `${APPS_SCRIPT_URL}?action=${action}&teacherCode=${encodeURIComponent(teacherCode)}&t=${Date.now()}`;
+                
+                console.log('Calling API:', url);
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('API Response:', data);
+                return data;
+                
+            } catch (error) {
+                console.error('API Error:', error);
+                throw new Error('Failed to connect to the server. Please check your internet connection and try again.');
+            }
+        }
+        
+        // Function to download PDF
+        function downloadPDF(base64Data, filename) {
+            try {
+                // Convert base64 to blob
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'application/pdf' });
+                
+                // Create download link
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                return true;
+            } catch (error) {
+                console.error('Download error:', error);
+                return false;
+            }
+        }
+        
+        // Main function to generate report
+        async function generateReport() {
+            const teacherCode = teacherCodeInput.value.trim();
+            
+            if (!teacherCode) {
+                showMessage('Please enter your teacher code.', 'error');
+                teacherCodeInput.focus();
+                return;
+            }
+            
+            // Reset UI
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating Report...';
+            progressContainer.style.display = 'block';
+            messageDiv.innerHTML = '';
+            updateProgress(0, 'Starting report generation...');
+            
+            // Simulate progress steps
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                if (progress < 90) {
+                    progress += 10;
+                    updateProgress(progress, `Processing... ${progress}%`);
+                }
+            }, 500);
+            
+            try {
+                // Step 1: Verify and generate PDF
+                updateProgress(20, 'Verifying teacher credentials...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                updateProgress(40, 'Fetching examination data...');
+                
+                // Call the Apps Script to generate PDF
+                const result = await callAppsScript('generatePDF', teacherCode);
+                
+                if (result.success === false) {
+                    throw new Error(result.error || 'Invalid teacher code or unauthorized access');
+                }
+                
+                // Step 3: Prepare download
+                updateProgress(80, 'Preparing PDF for download...');
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                if (result.pdfData) {
+                    // Generate filename with timestamp
+                    const now = new Date();
+                    const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
+                    const filename = `Examination_Report_${timestamp}.pdf`;
+                    
+                    updateProgress(95, 'Downloading report...');
+                    
+                    // Download the PDF
+                    const downloaded = downloadPDF(result.pdfData, filename);
+                    
+                    if (downloaded) {
+                        clearInterval(progressInterval);
+                        updateProgress(100, 'Complete! Report downloaded successfully.');
+                        showMessage('✓ Report generated and downloaded successfully!', 'success');
+                        
+                        // Reset after 3 seconds
+                        setTimeout(() => {
+                            progressContainer.style.display = 'none';
+                            updateProgress(0, '');
+                        }, 3000);
+                    } else {
+                        throw new Error('Failed to download PDF');
+                    }
+                } else {
+                    throw new Error('No PDF data received from server');
+                }
+                
+            } catch (error) {
+                clearInterval(progressInterval);
+                console.error('Generation error:', error);
+                showMessage(error.message || 'Failed to generate report. Please try again.', 'error');
+                progressContainer.style.display = 'none';
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fas fa-download"></i> Generate & Download Report';
+            }
+        }
+        
+        // Event listener for generate button
+        generateBtn.addEventListener('click', generateReport);
+        
+        // Allow Enter key to trigger generation
+        teacherCodeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateReport();
+            }
+        });
+        
+        // Test if the page is working
+        console.log('Page loaded successfully');
+        console.log('Apps Script URL:', APPS_SCRIPT_URL);
+    </script>
+</body>
+</html>
