@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lunzu Secondary School - Examination Report System</title>
+    <title>Lunzu Secondary School - Examination Dashboard</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <style>
         :root {
             --primary-color: #1a73e8;
             --secondary-color: #1557b0;
-            --light-gray: #f8f9fa;
-            --dark-gray: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
         }
         
         body {
@@ -24,12 +28,11 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            margin: 0;
         }
         
         .container {
-            max-width: 800px;
-            margin: 30px auto;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         
         .card {
@@ -37,27 +40,31 @@
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            margin-bottom: 30px;
         }
         
         .card-header {
-            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 25px 30px;
         }
         
-        .card-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .card-header p {
-            opacity: 0.9;
+        .card-header h2 {
             margin: 0;
+            font-size: 24px;
+        }
+        
+        .card-header i {
+            margin-right: 10px;
         }
         
         .card-body {
-            padding: 40px;
+            padding: 30px;
+        }
+        
+        .login-card {
+            max-width: 500px;
+            margin: 50px auto;
         }
         
         .form-group {
@@ -85,331 +92,502 @@
             box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
         }
         
-        .checkbox-group {
-            margin: 20px 0;
-        }
-        
-        .btn-generate {
-            width: 100%;
+        .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
             border: none;
-            padding: 15px;
-            font-size: 18px;
+            padding: 12px 30px;
             font-weight: 600;
             border-radius: 10px;
-            cursor: pointer;
             transition: all 0.3s ease;
-            margin: 20px 0;
         }
         
-        .btn-generate:hover:not(:disabled) {
+        .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
-        .btn-generate:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #218838);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 10px;
         }
         
-        .progress-container {
-            margin: 20px 0;
-            display: none;
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #e0a800);
+            border: none;
+            color: #333;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 10px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .table-responsive {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
         }
         
         .progress {
-            height: 10px;
-            border-radius: 5px;
+            height: 8px;
+            border-radius: 4px;
         }
         
-        .progress-bar {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            transition: width 0.3s ease;
-        }
-        
-        .status-message {
+        .loading-spinner {
             text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-            color: var(--dark-gray);
+            padding: 50px;
         }
         
-        .alert {
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        
-        .spinner-border {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-        
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: rgba(255, 255, 255, 0.8);
+        .badge-paper {
             font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 20px;
         }
         
         @media (max-width: 768px) {
             .card-body {
-                padding: 25px;
+                padding: 20px;
             }
             
-            .card-header h1 {
-                font-size: 22px;
+            .stat-number {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-chalkboard-teacher" style="font-size: 48px; margin-bottom: 15px;"></i>
-                <h1>Lunzu Secondary School</h1>
-                <p>Examination Department - Results Submission System</p>
-            </div>
-            
-            <div class="card-body">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> 
-                    Enter your teacher code to generate the examination submission summary report.
+        <!-- Login Section -->
+        <div id="loginSection" class="login-card">
+            <div class="card">
+                <div class="card-header text-center">
+                    <i class="fas fa-chalkboard-teacher" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <h2>Lunzu Secondary School</h2>
+                    <p>Examination Dashboard</p>
                 </div>
-                
-                <div class="form-group">
-                    <label for="teacherCode">
-                        <i class="fas fa-key"></i> Teacher Code:
-                    </label>
-                    <input type="password" id="teacherCode" class="form-control" 
-                           placeholder="Enter your unique teacher code" autocomplete="off">
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="showPassword">
-                    <label for="showPassword" style="margin-left: 10px; font-weight: normal;">
-                        <i class="fas fa-eye"></i> Show Teacher Code
-                    </label>
-                </div>
-                
-                <button id="generateBtn" class="btn-generate">
-                    <i class="fas fa-download"></i> Generate & Download Report
-                </button>
-                
-                <div class="progress-container" id="progressContainer">
-                    <div class="progress">
-                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Enter your teacher code to access the dashboard
                     </div>
-                    <div class="status-message" id="statusMessage"></div>
+                    
+                    <div class="form-group">
+                        <label for="teacherCode"><i class="fas fa-key"></i> Teacher Code:</label>
+                        <input type="password" id="teacherCode" class="form-control" placeholder="Enter your teacher code">
+                    </div>
+                    
+                    <div class="checkbox-group mb-3">
+                        <input type="checkbox" id="showPassword">
+                        <label for="showPassword" class="ms-2">Show Teacher Code</label>
+                    </div>
+                    
+                    <button id="loginBtn" class="btn btn-primary w-100">
+                        <i class="fas fa-sign-in-alt"></i> Access Dashboard
+                    </button>
+                    
+                    <div id="loginMessage" class="mt-3"></div>
                 </div>
-                
-                <div id="message"></div>
             </div>
         </div>
         
-        <div class="footer">
-            <p>&copy; 2024 Lunzu Secondary School - Examination Department</p>
-            <p>Secure system for authorized teachers only</p>
+        <!-- Dashboard Section (Hidden until login) -->
+        <div id="dashboardSection" style="display: none;">
+            <!-- Header Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="fas fa-chalkboard fa-2x" style="color: var(--primary-color);"></i>
+                        <div class="stat-number" id="totalClasses">0</div>
+                        <div class="stat-label">Total Classes</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="fas fa-book fa-2x" style="color: var(--success-color);"></i>
+                        <div class="stat-number" id="totalSubjects">0</div>
+                        <div class="stat-label">Total Subjects</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="fas fa-file-pdf fa-2x" style="color: var(--danger-color);"></i>
+                        <div class="stat-number" id="totalPaper1">0</div>
+                        <div class="stat-label">Paper 1 Scripts</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="fas fa-file-alt fa-2x" style="color: var(--warning-color);"></i>
+                        <div class="stat-number" id="totalScripts">0</div>
+                        <div class="stat-label">Total Scripts</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <button id="refreshBtn" class="btn btn-primary w-100">
+                                <i class="fas fa-sync-alt"></i> Refresh Dashboard
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button id="downloadPdfBtn" class="btn btn-success w-100">
+                                <i class="fas fa-download"></i> Download PDF Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Row -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-chart-bar"></i> Submissions by Subject</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="subjectsChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-chart-pie"></i> Paper Distribution</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="papersChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-table"></i> Detailed Results</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Teachers</th>
+                                    <th>Paper 1</th>
+                                    <th>Paper 2</th>
+                                    <th>Paper 3</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center">Loading data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // IMPORTANT: Replace with your Google Apps Script Web App URL
-        // Make sure you've set "Who has access: Anyone" in deployment settings
+        // Configuration
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSdL3OC7QSc2z5Eis47q6Q7dKQzE12eBaqB-i67igJmF26mzm1empfQUmQ03QdwSPkwQ/exec";
         
-        // Get DOM elements
+        // Global variables
+        let currentTeacherCode = null;
+        let currentReportData = null;
+        let subjectsChart = null;
+        let papersChart = null;
+        
+        // DOM Elements
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
         const teacherCodeInput = document.getElementById('teacherCode');
         const showPasswordCheckbox = document.getElementById('showPassword');
-        const generateBtn = document.getElementById('generateBtn');
-        const progressContainer = document.getElementById('progressContainer');
-        const progressBar = document.getElementById('progressBar');
-        const statusMessage = document.getElementById('statusMessage');
-        const messageDiv = document.getElementById('message');
+        const loginBtn = document.getElementById('loginBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const loginMessage = document.getElementById('loginMessage');
         
         // Show/hide password
         showPasswordCheckbox.addEventListener('change', function() {
             teacherCodeInput.type = this.checked ? 'text' : 'password';
         });
         
-        // Function to show message
-        function showMessage(text, type = 'error') {
-            messageDiv.innerHTML = `
-                <div class="alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show" role="alert">
-                    <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i>
-                    ${text}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            `;
-            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-        
-        // Function to update progress
-        function updateProgress(percent, message) {
-            progressBar.style.width = percent + '%';
-            statusMessage.textContent = message;
-        }
-        
-        // Function to make API call using JSONP (bypasses CORS)
-        function callAppsScriptJSONP(action, teacherCode) {
+        // JSONP Call function
+        function callAppsScript(action, teacherCode) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 const url = `${APPS_SCRIPT_URL}?action=${action}&teacherCode=${encodeURIComponent(teacherCode)}&callback=${callbackName}&t=${Date.now()}`;
                 
-                // Create callback function
                 window[callbackName] = function(data) {
                     delete window[callbackName];
                     document.body.removeChild(script);
                     resolve(data);
                 };
                 
-                // Create script tag
                 const script = document.createElement('script');
                 script.src = url;
                 script.onerror = function() {
                     delete window[callbackName];
                     document.body.removeChild(script);
-                    reject(new Error('JSONP request failed. Please check your Apps Script URL and deployment settings.'));
+                    reject(new Error('Connection failed'));
                 };
                 
                 document.body.appendChild(script);
             });
         }
         
-        // Function to download PDF
-        function downloadPDF(base64Data, filename) {
+        // Load dashboard data
+        async function loadDashboardData() {
             try {
-                const byteCharacters = atob(base64Data);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                showMessage(loginMessage, 'Loading dashboard data...', 'info');
+                
+                const result = await callAppsScript('getDashboardData', currentTeacherCode);
+                
+                if (!result.success) {
+                    throw new Error(result.error);
                 }
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], { type: 'application/pdf' });
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
-                link.href = url;
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                return true;
+                
+                currentReportData = result.data;
+                updateDashboard();
+                showMessage(loginMessage, 'Dashboard loaded successfully!', 'success');
+                setTimeout(() => {
+                    if (loginMessage) loginMessage.innerHTML = '';
+                }, 3000);
+                
             } catch (error) {
-                console.error('Download error:', error);
-                return false;
+                console.error('Error loading dashboard:', error);
+                showMessage(loginMessage, 'Failed to load dashboard: ' + error.message, 'danger');
             }
         }
         
-        // Main function to generate report
-        async function generateReport() {
+        // Update dashboard UI
+        function updateDashboard() {
+            if (!currentReportData) return;
+            
+            // Update stats
+            document.getElementById('totalClasses').textContent = currentReportData.stats.totalClasses;
+            document.getElementById('totalSubjects').textContent = currentReportData.stats.totalSubjects;
+            document.getElementById('totalPaper1').textContent = currentReportData.stats.totalPaper1;
+            document.getElementById('totalScripts').textContent = currentReportData.stats.totalScripts;
+            
+            // Update table
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            
+            currentReportData.items.forEach((item, index) => {
+                const row = tableBody.insertRow();
+                const total = (item.paper1 || 0) + (item.paper2 || 0) + (item.paper3 || 0);
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${item.className}</strong></td>
+                    <td>${item.subject}</td>
+                    <td>${item.teachers}</td>
+                    <td><span class="badge bg-primary">${item.paper1 || '-'}</span></td>
+                    <td><span class="badge bg-success">${item.paper2 || '-'}</span></td>
+                    <td><span class="badge bg-warning">${item.paper3 || '-'}</span></td>
+                    <td><strong>${total}</strong></td>
+                `;
+            });
+            
+            // Update charts
+            updateCharts();
+        }
+        
+        // Update charts
+        function updateCharts() {
+            if (!currentReportData) return;
+            
+            // Prepare data for subjects chart (top 10)
+            const subjectsData = currentReportData.items.slice(0, 10);
+            const subjectLabels = subjectsData.map(item => item.subject.substring(0, 15));
+            const subjectTotals = subjectsData.map(item => (item.paper1 || 0) + (item.paper2 || 0) + (item.paper3 || 0));
+            
+            // Destroy existing charts
+            if (subjectsChart) subjectsChart.destroy();
+            if (papersChart) papersChart.destroy();
+            
+            // Create subjects chart
+            const subjectsCtx = document.getElementById('subjectsChart').getContext('2d');
+            subjectsChart = new Chart(subjectsCtx, {
+                type: 'bar',
+                data: {
+                    labels: subjectLabels,
+                    datasets: [{
+                        label: 'Total Submissions',
+                        data: subjectTotals,
+                        backgroundColor: 'rgba(26, 115, 232, 0.7)',
+                        borderColor: '#1a73e8',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: false }
+                    }
+                }
+            });
+            
+            // Create papers distribution chart
+            const papersCtx = document.getElementById('papersChart').getContext('2d');
+            papersChart = new Chart(papersCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Paper 1', 'Paper 2', 'Paper 3'],
+                    datasets: [{
+                        data: [
+                            currentReportData.stats.totalPaper1,
+                            currentReportData.stats.totalPaper2,
+                            currentReportData.stats.totalPaper3
+                        ],
+                        backgroundColor: ['#1a73e8', '#28a745', '#ffc107'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+        
+        // Download PDF
+        async function downloadPDF() {
+            try {
+                downloadPdfBtn.disabled = true;
+                downloadPdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating PDF...';
+                
+                const result = await callAppsScript('generatePDF', currentTeacherCode);
+                
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+                
+                // Download PDF
+                const link = document.createElement('a');
+                const now = new Date();
+                const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                link.href = 'data:application/pdf;base64,' + result.pdfData;
+                link.download = `Examination_Report_${timestamp}.pdf`;
+                link.click();
+                
+                showMessage(loginMessage, 'PDF downloaded successfully!', 'success');
+                setTimeout(() => {
+                    if (loginMessage) loginMessage.innerHTML = '';
+                }, 3000);
+                
+            } catch (error) {
+                console.error('PDF Error:', error);
+                showMessage(loginMessage, 'Failed to generate PDF: ' + error.message, 'danger');
+            } finally {
+                downloadPdfBtn.disabled = false;
+                downloadPdfBtn.innerHTML = '<i class="fas fa-download"></i> Download PDF Report';
+            }
+        }
+        
+        // Show message helper
+        function showMessage(element, text, type) {
+            if (!element) return;
+            element.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${text}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>`;
+        }
+        
+        // Login function
+        async function login() {
             const teacherCode = teacherCodeInput.value.trim();
             
             if (!teacherCode) {
-                showMessage('Please enter your teacher code.', 'error');
-                teacherCodeInput.focus();
+                showMessage(loginMessage, 'Please enter your teacher code.', 'danger');
                 return;
             }
             
-            // Reset UI
-            generateBtn.disabled = true;
-            generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating Report...';
-            progressContainer.style.display = 'block';
-            messageDiv.innerHTML = '';
-            updateProgress(0, 'Starting report generation...');
-            
-            // Simulate progress steps
-            let progress = 0;
-            const progressInterval = setInterval(() => {
-                if (progress < 90) {
-                    progress += 10;
-                    updateProgress(progress, `Processing... ${progress}%`);
-                }
-            }, 500);
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Verifying...';
             
             try {
-                updateProgress(20, 'Verifying teacher credentials...');
+                const result = await callAppsScript('verify', teacherCode);
                 
-                updateProgress(40, 'Fetching examination data...');
-                
-                // Call the Apps Script using JSONP (bypasses CORS)
-                const result = await callAppsScriptJSONP('generatePDF', teacherCode);
-                
-                if (result.success === false) {
-                    throw new Error(result.error || 'Invalid teacher code or unauthorized access');
-                }
-                
-                updateProgress(80, 'Preparing PDF for download...');
-                
-                if (result.pdfData) {
-                    const now = new Date();
-                    const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
-                    const filename = `Examination_Report_${timestamp}.pdf`;
-                    
-                    updateProgress(95, 'Downloading report...');
-                    
-                    const downloaded = downloadPDF(result.pdfData, filename);
-                    
-                    if (downloaded) {
-                        clearInterval(progressInterval);
-                        updateProgress(100, 'Complete! Report downloaded successfully.');
-                        showMessage('✓ Report generated and downloaded successfully!', 'success');
-                        
-                        setTimeout(() => {
-                            progressContainer.style.display = 'none';
-                            updateProgress(0, '');
-                        }, 3000);
-                    } else {
-                        throw new Error('Failed to download PDF');
-                    }
-                } else {
-                    throw new Error('No PDF data received from server');
-                }
-                
-            } catch (error) {
-                clearInterval(progressInterval);
-                console.error('Generation error:', error);
-                showMessage(error.message || 'Failed to generate report. Please try again.', 'error');
-                progressContainer.style.display = 'none';
-            } finally {
-                generateBtn.disabled = false;
-                generateBtn.innerHTML = '<i class="fas fa-download"></i> Generate & Download Report';
-            }
-        }
-        
-        // Event listener for generate button
-        generateBtn.addEventListener('click', generateReport);
-        
-        // Allow Enter key to trigger generation
-        teacherCodeInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                generateReport();
-            }
-        });
-        
-        // Test connection on load
-        async function testConnection() {
-            try {
-                const result = await callAppsScriptJSONP('test', 'test');
                 if (result.success) {
-                    console.log('✅ Connection successful!', result);
-                    showMessage('✓ System connected successfully!', 'success');
-                    setTimeout(() => {
-                        const alert = messageDiv.querySelector('.alert');
-                        if (alert) alert.remove();
-                    }, 3000);
+                    currentTeacherCode = teacherCode;
+                    loginSection.style.display = 'none';
+                    dashboardSection.style.display = 'block';
+                    await loadDashboardData();
+                } else {
+                    showMessage(loginMessage, 'Invalid teacher code. Please try again.', 'danger');
                 }
             } catch (error) {
-                console.error('Connection test failed:', error);
-                showMessage('⚠️ Unable to connect to the server. Please check your internet connection and refresh the page.', 'error');
+                showMessage(loginMessage, 'Connection error. Please try again.', 'danger');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Access Dashboard';
             }
         }
         
-        // Test connection on page load
-        testConnection();
+        // Event listeners
+        loginBtn.addEventListener('click', login);
+        refreshBtn.addEventListener('click', loadDashboardData);
+        downloadPdfBtn.addEventListener('click', downloadPDF);
+        
+        teacherCodeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
     </script>
 </body>
 </html>
