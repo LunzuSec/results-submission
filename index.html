@@ -112,7 +112,7 @@
             width: 100%;
         }
         
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
@@ -124,6 +124,16 @@
             font-weight: 600;
             border-radius: 10px;
             width: 100%;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         /* Stat Cards */
@@ -156,7 +166,7 @@
             font-size: 1.8rem;
         }
         
-        /* Scrollable Table Container - KEY FIX FOR MOBILE */
+        /* Scrollable Table Container - Mobile Friendly */
         .table-scroll-container {
             position: relative;
             width: 100%;
@@ -169,7 +179,7 @@
             max-height: 70vh;
         }
         
-        /* Custom scrollbar for better appearance */
+        /* Custom scrollbar */
         .table-scroll-container::-webkit-scrollbar {
             height: 8px;
             width: 8px;
@@ -226,6 +236,9 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 0.75rem;
+            display: inline-block;
+            text-align: center;
+            min-width: 50px;
         }
         
         .badge-paper2 {
@@ -234,6 +247,9 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 0.75rem;
+            display: inline-block;
+            text-align: center;
+            min-width: 50px;
         }
         
         .badge-paper3 {
@@ -242,9 +258,12 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 0.75rem;
+            display: inline-block;
+            text-align: center;
+            min-width: 50px;
         }
         
-        /* Chart containers - responsive */
+        /* Chart containers */
         .chart-container {
             position: relative;
             height: 250px;
@@ -268,10 +287,63 @@
             min-width: 120px;
         }
         
-        /* Loading spinner */
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+        
         .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
             text-align: center;
-            padding: 40px;
+            min-width: 250px;
+        }
+        
+        .loading-spinner .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .progress-bar-container {
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            transition: width 0.3s ease;
+        }
+        
+        .time-elapsed {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
         }
         
         /* Alert messages */
@@ -280,7 +352,7 @@
             font-size: 0.9rem;
         }
         
-        /* Responsive adjustments */
+        /* Responsive */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -323,6 +395,7 @@
             .badge-paper1, .badge-paper2, .badge-paper3 {
                 padding: 3px 8px;
                 font-size: 0.7rem;
+                min-width: 40px;
             }
             
             .chart-container {
@@ -352,12 +425,10 @@
             font-size: 11px;
         }
         
-        /* Checkbox group */
         .checkbox-group {
             margin: 15px 0;
         }
         
-        /* Row spacing */
         .row {
             margin-right: -8px;
             margin-left: -8px;
@@ -366,6 +437,13 @@
         .row > [class*="col-"] {
             padding-right: 8px;
             padding-left: 8px;
+        }
+        
+        /* Teacher name column wrap */
+        .teacher-column {
+            max-width: 200px;
+            white-space: normal !important;
+            word-break: break-word;
         }
     </style>
 </head>
@@ -386,7 +464,7 @@
                     
                     <div class="form-group">
                         <label for="teacherCode"><i class="fas fa-key"></i> Teacher Code:</label>
-                        <input type="password" id="teacherCode" class="form-control" placeholder="Enter your teacher code">
+                        <input type="password" id="teacherCode" class="form-control" placeholder="Enter your teacher code" autocomplete="off">
                     </div>
                     
                     <div class="checkbox-group">
@@ -515,11 +593,27 @@
             <p>Secure system for authorized teachers only</p>
         </div>
     </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none;" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <div id="loadingMessage">Loading data...</div>
+            <div class="progress-bar-container" id="progressContainer" style="display: none;">
+                <div class="progress">
+                    <div class="progress-bar" id="loadingProgressBar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="time-elapsed" id="timeElapsed">Elapsed: 0 seconds</div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Configuration - UPDATE THIS WITH YOUR APPS SCRIPT URL
+        // ============================================
+        // CONFIGURATION - UPDATE THIS URL
+        // ============================================
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_APPS_SCRIPT_ID_HERE/exec";
         
         // Global variables
@@ -527,6 +621,9 @@
         let currentReportData = null;
         let subjectsChart = null;
         let papersChart = null;
+        let cachedData = null;
+        let cacheTime = null;
+        const CACHE_DURATION = 60000; // Cache for 1 minute
         
         // DOM Elements
         const loginSection = document.getElementById('loginSection');
@@ -537,19 +634,69 @@
         const refreshBtn = document.getElementById('refreshBtn');
         const downloadPdfBtn = document.getElementById('downloadPdfBtn');
         const loginMessage = document.getElementById('loginMessage');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const progressContainer = document.getElementById('progressContainer');
+        const loadingProgressBar = document.getElementById('loadingProgressBar');
+        const timeElapsedSpan = document.getElementById('timeElapsed');
+        
+        let startTime = null;
+        let elapsedInterval = null;
         
         // Show/hide password
         showPasswordCheckbox.addEventListener('change', function() {
             teacherCodeInput.type = this.checked ? 'text' : 'password';
         });
         
-        // JSONP Call function
-        function callAppsScript(action, teacherCode) {
+        // Show loading overlay
+        function showLoading(message, showProgress = false) {
+            loadingMessage.textContent = message;
+            if (showProgress) {
+                progressContainer.style.display = 'block';
+                loadingProgressBar.style.width = '0%';
+            } else {
+                progressContainer.style.display = 'none';
+            }
+            startTime = Date.now();
+            timeElapsedSpan.textContent = 'Elapsed: 0 seconds';
+            if (elapsedInterval) clearInterval(elapsedInterval);
+            elapsedInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                timeElapsedSpan.textContent = `Elapsed: ${elapsed} seconds`;
+            }, 1000);
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        // Update loading progress
+        function updateLoadingProgress(percent, message) {
+            loadingMessage.textContent = message;
+            loadingProgressBar.style.width = percent + '%';
+        }
+        
+        // Hide loading overlay
+        function hideLoading() {
+            if (elapsedInterval) clearInterval(elapsedInterval);
+            loadingOverlay.style.display = 'none';
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            return elapsed;
+        }
+        
+        // JSONP Call function with timeout
+        function callAppsScript(action, teacherCode, timeout = 60000) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 const url = `${APPS_SCRIPT_URL}?action=${action}&teacherCode=${encodeURIComponent(teacherCode)}&callback=${callbackName}&t=${Date.now()}`;
                 
+                const timeoutId = setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                    }
+                    if (script && script.parentNode) document.body.removeChild(script);
+                    reject(new Error('Request timeout after ' + (timeout/1000) + ' seconds'));
+                }, timeout);
+                
                 window[callbackName] = function(data) {
+                    clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script && script.parentNode) document.body.removeChild(script);
                     resolve(data);
@@ -558,6 +705,7 @@
                 const script = document.createElement('script');
                 script.src = url;
                 script.onerror = function() {
+                    clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script && script.parentNode) document.body.removeChild(script);
                     reject(new Error('Connection failed'));
@@ -567,24 +715,47 @@
             });
         }
         
-        // Load dashboard data
-        async function loadDashboardData() {
+        // Load dashboard data with cache
+        async function loadDashboardData(forceRefresh = false) {
+            // Check cache first
+            if (!forceRefresh && cachedData && cacheTime && (Date.now() - cacheTime) < CACHE_DURATION) {
+                console.log('Using cached data');
+                currentReportData = cachedData;
+                updateDashboard();
+                return;
+            }
+            
+            showLoading('Loading dashboard data...', true);
+            updateLoadingProgress(10, 'Connecting to server...');
+            
             try {
-                showTemporaryMessage(loginMessage, 'Loading dashboard data...', 'info');
-                
-                const result = await callAppsScript('getDashboardData', currentTeacherCode);
+                updateLoadingProgress(30, 'Fetching examination data...');
+                const result = await callAppsScript('getDashboardData', currentTeacherCode, 90000);
                 
                 if (!result.success) {
                     throw new Error(result.error);
                 }
                 
+                updateLoadingProgress(80, 'Processing data...');
+                
+                // Cache the result
+                cachedData = result.data;
+                cacheTime = Date.now();
                 currentReportData = result.data;
+                
+                updateLoadingProgress(100, 'Rendering dashboard...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
                 updateDashboard();
-                showTemporaryMessage(loginMessage, 'Dashboard loaded successfully!', 'success');
+                
+                const elapsed = hideLoading();
+                showTemporaryMessage(loginMessage, `Dashboard loaded in ${elapsed} seconds!`, 'success');
                 
             } catch (error) {
+                hideLoading();
                 console.error('Error loading dashboard:', error);
                 showMessage(loginMessage, 'Failed to load dashboard: ' + error.message, 'danger');
+                throw error;
             }
         }
         
@@ -592,6 +763,7 @@
         function showTemporaryMessage(element, text, type) {
             if (!element) return;
             element.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
                 ${text}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>`;
@@ -600,16 +772,25 @@
                 if (element.innerHTML.includes(text)) {
                     element.innerHTML = '';
                 }
-            }, 3000);
+            }, 4000);
         }
         
         // Show permanent message
         function showMessage(element, text, type) {
             if (!element) return;
             element.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                <i class="fas fa-${type === 'danger' ? 'exclamation-triangle' : 'info-circle'}"></i>
                 ${text}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>`;
+        }
+        
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         // Update dashboard UI
@@ -636,7 +817,7 @@
                         <td style="text-align: center;">${index + 1}</td>
                         <td><strong>${escapeHtml(item.className)}</strong></td>
                         <td>${escapeHtml(item.subject)}</td>
-                        <td style="max-width: 200px; white-space: normal; word-break: break-word;">${escapeHtml(item.teachers)}</td>
+                        <td class="teacher-column">${escapeHtml(item.teachers)}</td>
                         <td style="text-align: center;"><span class="badge-paper1">${item.paper1 || '-'}</span></td>
                         <td style="text-align: center;"><span class="badge-paper2">${item.paper2 || '-'}</span></td>
                         <td style="text-align: center;"><span class="badge-paper3">${item.paper3 || '-'}</span></td>
@@ -647,14 +828,6 @@
             
             // Update charts
             updateCharts();
-        }
-        
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
         }
         
         // Update charts
@@ -731,13 +904,18 @@
         async function downloadPDF() {
             try {
                 downloadPdfBtn.disabled = true;
-                downloadPdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating...';
+                downloadPdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating PDF...';
                 
-                const result = await callAppsScript('generatePDF', currentTeacherCode);
+                showLoading('Generating PDF report...', true);
+                updateLoadingProgress(20, 'Preparing data...');
+                
+                const result = await callAppsScript('generatePDF', currentTeacherCode, 120000);
                 
                 if (!result.success) {
                     throw new Error(result.error);
                 }
+                
+                updateLoadingProgress(80, 'Creating PDF file...');
                 
                 // Download PDF
                 const link = document.createElement('a');
@@ -747,9 +925,11 @@
                 link.download = `Examination_Report_${timestamp}.pdf`;
                 link.click();
                 
-                showTemporaryMessage(loginMessage, 'PDF downloaded successfully!', 'success');
+                const elapsed = hideLoading();
+                showTemporaryMessage(loginMessage, `PDF downloaded successfully in ${elapsed} seconds!`, 'success');
                 
             } catch (error) {
+                hideLoading();
                 console.error('PDF Error:', error);
                 showMessage(loginMessage, 'Failed to generate PDF: ' + error.message, 'danger');
             } finally {
@@ -772,19 +952,22 @@
             loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Verifying...';
             
             try {
-                const result = await callAppsScript('verify', teacherCode);
+                showLoading('Verifying teacher code...', false);
+                const result = await callAppsScript('verify', teacherCode, 30000);
+                hideLoading();
                 
                 if (result.success) {
                     currentTeacherCode = teacherCode;
                     loginSection.style.display = 'none';
                     dashboardSection.style.display = 'block';
-                    await loadDashboardData();
+                    await loadDashboardData(false);
                 } else {
                     showMessage(loginMessage, 'Invalid teacher code. Please try again.', 'danger');
                 }
             } catch (error) {
+                hideLoading();
                 console.error('Login error:', error);
-                showMessage(loginMessage, 'Connection error. Please check your internet and try again.', 'danger');
+                showMessage(loginMessage, 'Connection error: ' + error.message, 'danger');
             } finally {
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Access Dashboard';
@@ -793,7 +976,7 @@
         
         // Event listeners
         loginBtn.addEventListener('click', login);
-        refreshBtn.addEventListener('click', loadDashboardData);
+        refreshBtn.addEventListener('click', () => loadDashboardData(true));
         downloadPdfBtn.addEventListener('click', downloadPDF);
         
         teacherCodeInput.addEventListener('keypress', function(e) {
