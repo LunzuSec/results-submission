@@ -24,6 +24,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            margin: 0;
         }
         
         .container {
@@ -217,11 +218,8 @@
     
     <script>
         // ============================================
-        // IMPORTANT: REPLACE WITH YOUR ACTUAL WEB APP URL
+        // YOUR GOOGLE APPS SCRIPT WEB APP URL
         // ============================================
-        // Get your Web App URL from Google Apps Script deployment
-        // It should look like: https://script.google.com/macros/s/ABC123xyz/exec
-        
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSdL3OC7QSc2z5Eis47q6Q7dKQzE12eBaqB-i67igJmF26mzm1empfQUmQ03QdwSPkwQ/exec";
         
         // Get DOM elements
@@ -412,11 +410,9 @@
             }
         });
         
-        // Check if URL is configured
-        if (APPS_SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbxSdL3OC7QSc2z5Eis47q6Q7dKQzE12eBaqB-i67igJmF26mzm1empfQUmQ03QdwSPkwQ/exec')) {
-            showMessage('⚠️ System not configured. Please contact the administrator.', 'error');
-            generateBtn.disabled = true;
-        }
+        // Test if the page is working
+        console.log('Page loaded successfully');
+        console.log('Apps Script URL:', APPS_SCRIPT_URL);
     </script>
 </body>
 </html>
