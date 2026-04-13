@@ -48,6 +48,55 @@
         .card-header i { margin-right: 8px; }
         .card-body { padding: 20px; }
         
+        /* Navigation Bar */
+        .navbar-custom {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-custom .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+        
+        .navbar-custom .navbar-brand i {
+            margin-right: 8px;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, var(--danger-color), #c82333);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            transform: translateX(-5px);
+            color: var(--secondary-color);
+        }
+        
         .login-card { max-width: 500px; margin: 50px auto; }
         
         .form-group { margin-bottom: 20px; }
@@ -103,9 +152,9 @@
         }
         
         .stat-card:hover { transform: translateY(-3px); }
-        .stat-number { font-size: 28px; font-weight: bold; color: var(--primary-color); }
-        .stat-label { color: #666; margin-top: 8px; font-size: 0.85rem; }
-        .stat-card i { font-size: 1.8rem; }
+        .stat-number { font-size: 24px; font-weight: bold; color: var(--primary-color); }
+        .stat-label { color: #666; margin-top: 8px; font-size: 0.75rem; }
+        .stat-card i { font-size: 1.5rem; }
         
         .chart-scroll-container {
             position: relative;
@@ -250,16 +299,16 @@
             .card-header { padding: 12px 15px; }
             .card-header h2 { font-size: 1.1rem; }
             .card-body { padding: 15px; }
-            .stat-number { font-size: 22px; }
-            .stat-label { font-size: 0.75rem; }
-            .stat-card i { font-size: 1.5rem; }
+            .stat-number { font-size: 18px; }
+            .stat-label { font-size: 0.7rem; }
+            .stat-card i { font-size: 1.2rem; }
             .dashboard-table thead th { padding: 8px 6px; font-size: 0.75rem; }
             .dashboard-table tbody td { padding: 8px 6px; font-size: 0.75rem; }
             .chart-wrapper { min-width: 500px; height: 250px; }
         }
         
         @media (max-width: 480px) {
-            .stat-number { font-size: 18px; }
+            .stat-number { font-size: 16px; }
             .action-buttons { flex-direction: column; }
             .action-buttons .btn { width: 100%; }
             .chart-wrapper { min-width: 400px; height: 220px; }
@@ -287,65 +336,98 @@
 <body>
     <div class="container">
         <!-- Login Section -->
-        <div id="loginSection" class="login-card">
-            <div class="card">
-                <div class="card-header text-center">
-                    <i class="fas fa-chalkboard-teacher" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
-                    <h2>Lunzu Secondary School</h2>
-                    <p class="mb-0">Examination Dashboard</p>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i> Enter your teacher code to access the dashboard
+        <div id="loginSection">
+            <!-- Back Link to Teachers Portal -->
+            <a href="https://lunzusec.github.io/School_results/teachers-portal.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Teachers Portal
+            </a>
+            
+            <div class="login-card">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <i class="fas fa-chalkboard-teacher" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                        <h2>Lunzu Secondary School</h2>
+                        <p class="mb-0">Examination Dashboard</p>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="teacherCode"><i class="fas fa-key"></i> Teacher Code:</label>
-                        <input type="password" id="teacherCode" class="form-control" placeholder="Enter your teacher code" autocomplete="off">
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> Enter your teacher code to access the dashboard
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="teacherCode"><i class="fas fa-key"></i> Teacher Code:</label>
+                            <input type="password" id="teacherCode" class="form-control" placeholder="Enter your teacher code" autocomplete="off">
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="showPassword">
+                            <label for="showPassword" class="ms-2">Show Teacher Code</label>
+                        </div>
+                        
+                        <button id="loginBtn" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Access Dashboard
+                        </button>
+                        
+                        <div id="loginMessage" class="mt-3"></div>
                     </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="showPassword">
-                        <label for="showPassword" class="ms-2">Show Teacher Code</label>
-                    </div>
-                    
-                    <button id="loginBtn" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt"></i> Access Dashboard
-                    </button>
-                    
-                    <div id="loginMessage" class="mt-3"></div>
                 </div>
             </div>
         </div>
         
-        <!-- Dashboard Section -->
+        <!-- Dashboard Section (Hidden until login) -->
         <div id="dashboardSection" style="display: none;">
-            <!-- Header Stats Row -->
+            <!-- Navigation Bar with Logout -->
+            <nav class="navbar-custom">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="navbar-brand">
+                        <i class="fas fa-chart-line"></i> Examination Dashboard
+                    </div>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- Header Stats Row - Now showing Paper 1, Paper 2, Paper 3 -->
             <div class="row mb-3">
-                <div class="col-6 col-md-3 mb-2">
+                <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
                         <i class="fas fa-chalkboard" style="color: var(--primary-color);"></i>
                         <div class="stat-number" id="totalClasses">0</div>
                         <div class="stat-label">Total Classes</div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-2">
+                <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
                         <i class="fas fa-book" style="color: var(--success-color);"></i>
                         <div class="stat-number" id="totalSubjects">0</div>
                         <div class="stat-label">Total Subjects</div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-2">
+                <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
-                        <i class="fas fa-file-pdf" style="color: var(--danger-color);"></i>
+                        <i class="fas fa-file-pdf" style="color: #1a73e8;"></i>
                         <div class="stat-number" id="totalPaper1">0</div>
-                        <div class="stat-label">Paper 1 Scripts</div>
+                        <div class="stat-label">Paper 1</div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-2">
+                <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
-                        <i class="fas fa-file-alt" style="color: var(--warning-color);"></i>
+                        <i class="fas fa-file-alt" style="color: #28a745;"></i>
+                        <div class="stat-number" id="totalPaper2">0</div>
+                        <div class="stat-label">Paper 2</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-2">
+                    <div class="stat-card">
+                        <i class="fas fa-file-alt" style="color: #ffc107;"></i>
+                        <div class="stat-number" id="totalPaper3">0</div>
+                        <div class="stat-label">Paper 3</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-2">
+                    <div class="stat-card">
+                        <i class="fas fa-calculator" style="color: var(--danger-color);"></i>
                         <div class="stat-number" id="totalScripts">0</div>
                         <div class="stat-label">Total Scripts</div>
                     </div>
@@ -357,10 +439,10 @@
                 <div class="card-body">
                     <div class="action-buttons">
                         <button id="refreshBtn" class="btn btn-primary">
-                            <i class="fas fa-sync-alt"></i> Refresh
+                            <i class="fas fa-sync-alt"></i> Refresh Data
                         </button>
                         <button id="downloadPdfBtn" class="btn btn-success">
-                            <i class="fas fa-download"></i> Download PDF
+                            <i class="fas fa-download"></i> Download PDF Report
                         </button>
                     </div>
                 </div>
@@ -468,6 +550,7 @@
         const teacherCodeInput = document.getElementById('teacherCode');
         const showPasswordCheckbox = document.getElementById('showPassword');
         const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         const refreshBtn = document.getElementById('refreshBtn');
         const downloadPdfBtn = document.getElementById('downloadPdfBtn');
         const loginMessage = document.getElementById('loginMessage');
@@ -487,6 +570,20 @@
             teacherCodeInput.type = this.checked ? 'text' : 'password';
         });
         
+        // Logout function
+        function logout() {
+            currentTeacherCode = null;
+            currentReportData = null;
+            groupedSubjects = null;
+            cachedData = null;
+            cacheTime = null;
+            loginSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+            teacherCodeInput.value = '';
+            loginMessage.innerHTML = '';
+        }
+        
+        // Show loading overlay
         function showLoading(message) {
             loadingMessage.textContent = message;
             startTime = Date.now();
@@ -583,10 +680,12 @@
         function updateDashboard() {
             if (!currentReportData) return;
             
-            // Update stats
+            // Update stats - including Paper 2 and Paper 3
             document.getElementById('totalClasses').textContent = currentReportData.stats.totalClasses;
             document.getElementById('totalSubjects').textContent = groupedSubjects.length;
             document.getElementById('totalPaper1').textContent = currentReportData.stats.totalPaper1;
+            document.getElementById('totalPaper2').textContent = currentReportData.stats.totalPaper2;
+            document.getElementById('totalPaper3').textContent = currentReportData.stats.totalPaper3;
             document.getElementById('totalScripts').textContent = currentReportData.stats.totalScripts;
             
             // Update table
@@ -614,23 +713,19 @@
         function updateCharts() {
             if (!groupedSubjects) return;
             
-            // Prepare data for grouped subjects chart (each subject once)
             const subjectLabels = groupedSubjects.map(item => 
                 item.subject.length > 25 ? item.subject.substring(0, 22) + '...' : item.subject
             );
             const subjectTotals = groupedSubjects.map(item => item.total);
             
-            // Calculate dynamic width
             const chartWrapper = document.querySelector('.chart-wrapper');
             const barWidth = 55;
             const minWidth = Math.max(500, subjectLabels.length * barWidth);
             if (chartWrapper) chartWrapper.style.minWidth = minWidth + 'px';
             
-            // Destroy existing chart
             if (subjectsChart) subjectsChart.destroy();
             if (papersChart) papersChart.destroy();
             
-            // Create grouped subjects chart
             const subjectsCtx = document.getElementById('subjectsChart').getContext('2d');
             subjectsChart = new Chart(subjectsCtx, {
                 type: 'bar',
@@ -672,7 +767,6 @@
                 }
             });
             
-            // Create papers distribution chart
             const papersCtx = document.getElementById('papersChart').getContext('2d');
             papersChart = new Chart(papersCtx, {
                 type: 'pie',
@@ -726,7 +820,7 @@
                 showMessage(loginMessage, 'PDF Error: ' + error.message, 'danger');
             } finally {
                 downloadPdfBtn.disabled = false;
-                downloadPdfBtn.innerHTML = '<i class="fas fa-download"></i> Download PDF';
+                downloadPdfBtn.innerHTML = '<i class="fas fa-download"></i> Download PDF Report';
             }
         }
         
@@ -750,7 +844,7 @@
                     dashboardSection.style.display = 'block';
                     await loadDashboardData(false);
                 } else {
-                    showMessage(loginMessage, 'Invalid teacher code.', 'danger');
+                    showMessage(loginMessage, 'Invalid teacher code. Please try again.', 'danger');
                 }
             } catch (error) {
                 hideLoading();
@@ -790,6 +884,7 @@
         
         // Event listeners
         loginBtn.addEventListener('click', login);
+        if (logoutBtn) logoutBtn.addEventListener('click', logout);
         refreshBtn.addEventListener('click', () => loadDashboardData(true));
         downloadPdfBtn.addEventListener('click', downloadPDF);
         teacherCodeInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
