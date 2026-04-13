@@ -83,21 +83,31 @@
             color: white;
         }
         
+        /* Back Link - White Font */
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            color: var(--primary-color);
+            color: white !important;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
         }
         
         .back-link:hover {
             transform: translateX(-5px);
-            color: var(--secondary-color);
+            color: white !important;
+            background: rgba(0, 0, 0, 0.5);
         }
         
-        .login-card { max-width: 500px; margin: 50px auto; }
+        .back-link i {
+            margin-right: 8px;
+        }
+        
+        .login-card { max-width: 500px; margin: 0 auto; }
         
         .form-group { margin-bottom: 20px; }
         label { font-weight: 600; margin-bottom: 8px; color: #333; display: block; }
@@ -305,6 +315,7 @@
             .dashboard-table thead th { padding: 8px 6px; font-size: 0.75rem; }
             .dashboard-table tbody td { padding: 8px 6px; font-size: 0.75rem; }
             .chart-wrapper { min-width: 500px; height: 250px; }
+            .back-link { font-size: 14px; padding: 8px 15px; }
         }
         
         @media (max-width: 480px) {
@@ -337,10 +348,12 @@
     <div class="container">
         <!-- Login Section -->
         <div id="loginSection">
-            <!-- Back Link to Teachers Portal -->
-            <a href="https://lunzusec.github.io/School_results/teachers-portal.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back to Teachers Portal
-            </a>
+            <!-- Back Link to Teachers Portal - White Font -->
+            <div style="text-align: center;">
+                <a href="https://lunzusec.github.io/School_results/teachers-portal.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Teachers Portal
+                </a>
+            </div>
             
             <div class="login-card">
                 <div class="card">
@@ -388,7 +401,7 @@
                 </div>
             </nav>
             
-            <!-- Header Stats Row - Now showing Paper 1, Paper 2, Paper 3 -->
+            <!-- Header Stats Row - Showing Paper 1, Paper 2, Paper 3 -->
             <div class="row mb-3">
                 <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
@@ -502,20 +515,20 @@
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
-                                <tr><td colspan="8" class="text-center">Loading...</td></tr>
+                                <tr><td colspan="8" class="text-center">Loading...<\/td><\/tr>
                             </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <\/table>
+                    <\/div>
+                <\/div>
+            <\/div>
+        <\/div>
         
         <!-- Footer -->
         <div class="footer">
             <p>&copy; <span id="currentYear"></span> Lunzu Secondary School - Examination Department</p>
             <p><i class="fas fa-shield-alt"></i> Secure system for authorized teachers only | <i class="fas fa-chart-line"></i> Real-time Dashboard</p>
-        </div>
-    </div>
+        <\/div>
+    <\/div>
     
     <!-- Loading Overlay -->
     <div id="loadingOverlay" style="display: none;" class="loading-overlay">
@@ -523,8 +536,8 @@
             <div class="spinner"></div>
             <div id="loadingMessage">Loading data...</div>
             <div class="time-elapsed" id="timeElapsed">Elapsed: 0 seconds</div>
-        </div>
-    </div>
+        <\/div>
+    <\/div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -696,14 +709,14 @@
                 const total = (item.paper1 || 0) + (item.paper2 || 0) + (item.paper3 || 0);
                 const row = tableBody.insertRow();
                 row.innerHTML = `
-                    <td style="text-align: center;">${index + 1}</td>
-                    <td><strong>${escapeHtml(item.className)}</strong></td>
-                    <td>${escapeHtml(item.subject)}</td>
-                    <td class="teacher-column">${escapeHtml(item.teachers)}</td>
-                    <td style="text-align: center;"><span class="badge-paper1">${item.paper1 || '-'}</span></td>
-                    <td style="text-align: center;"><span class="badge-paper2">${item.paper2 || '-'}</span></td>
-                    <td style="text-align: center;"><span class="badge-paper3">${item.paper3 || '-'}</span></td>
-                    <td style="text-align: center;"><strong>${total}</strong></td>
+                    <td style="text-align: center;">${index + 1}<\/td>
+                    <td><strong>${escapeHtml(item.className)}<\/strong><\/td>
+                    <td>${escapeHtml(item.subject)}<\/td>
+                    <td class="teacher-column">${escapeHtml(item.teachers)}<\/td>
+                    <td style="text-align: center;"><span class="badge-paper1">${item.paper1 || '-'}<\/span><\/td>
+                    <td style="text-align: center;"><span class="badge-paper2">${item.paper2 || '-'}<\/span><\/td>
+                    <td style="text-align: center;"><span class="badge-paper3">${item.paper3 || '-'}<\/span><\/td>
+                    <td style="text-align: center;"><strong>${total}<\/strong><\/td>
                 `;
             });
             
@@ -888,6 +901,6 @@
         refreshBtn.addEventListener('click', () => loadDashboardData(true));
         downloadPdfBtn.addEventListener('click', downloadPDF);
         teacherCodeInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
-    </script>
-</body>
-</html>
+    <\/script>
+<\/body>
+<\/html>
