@@ -17,9 +17,9 @@
             --warning-color: #ffc107;
             --danger-color: #dc3545;
         }
-        
+
         * { box-sizing: border-box; }
-        
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -27,9 +27,9 @@
             padding: 15px;
             margin: 0;
         }
-        
+
         .container { max-width: 1400px; margin: 0 auto; padding: 0; }
-        
+
         .card {
             background: white;
             border-radius: 20px;
@@ -37,17 +37,17 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-        
+
         .card-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 15px 20px;
         }
-        
+
         .card-header h2 { margin: 0; font-size: 1.3rem; }
         .card-header i { margin-right: 8px; }
         .card-body { padding: 20px; }
-        
+
         /* Navigation Bar */
         .navbar-custom {
             background: white;
@@ -83,35 +83,25 @@
             color: white;
         }
         
-        /* Back Link - White Font */
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            color: white !important;
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
         }
         
         .back-link:hover {
             transform: translateX(-5px);
-            color: white !important;
-            background: rgba(0, 0, 0, 0.5);
+            color: var(--secondary-color);
         }
         
-        .back-link i {
-            margin-right: 8px;
-        }
-        
-        .login-card { max-width: 500px; margin: 0 auto; }
-        
+        .login-card { max-width: 500px; margin: 50px auto; }
+
         .form-group { margin-bottom: 20px; }
         label { font-weight: 600; margin-bottom: 8px; color: #333; display: block; }
-        
+
         input[type="password"] {
             width: 100%;
             padding: 12px 15px;
@@ -120,13 +110,13 @@
             font-size: 16px;
             transition: all 0.3s ease;
         }
-        
+
         input[type="password"]:focus {
             border-color: var(--primary-color);
             outline: none;
             box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border: none;
@@ -135,7 +125,7 @@
             border-radius: 10px;
             width: 100%;
         }
-        
+
         .btn-success {
             background: linear-gradient(135deg, var(--success-color), #218838);
             border: none;
@@ -144,14 +134,14 @@
             border-radius: 10px;
             width: 100%;
         }
-        
+
         .btn-primary:hover:not(:disabled), .btn-success:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        
+
         .stat-card {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border-radius: 15px;
@@ -160,12 +150,15 @@
             transition: transform 0.3s ease;
             height: 100%;
         }
-        
+
         .stat-card:hover { transform: translateY(-3px); }
+        .stat-number { font-size: 28px; font-weight: bold; color: var(--primary-color); }
+        .stat-label { color: #666; margin-top: 8px; font-size: 0.85rem; }
+        .stat-card i { font-size: 1.8rem; }
         .stat-number { font-size: 24px; font-weight: bold; color: var(--primary-color); }
         .stat-label { color: #666; margin-top: 8px; font-size: 0.75rem; }
         .stat-card i { font-size: 1.5rem; }
-        
+
         .chart-scroll-container {
             position: relative;
             width: 100%;
@@ -174,14 +167,14 @@
             -webkit-overflow-scrolling: touch;
             cursor: grab;
         }
-        
+
         .chart-scroll-container:active { cursor: grabbing; }
         .chart-wrapper { min-width: 600px; height: 300px; position: relative; }
-        
+
         .chart-scroll-container::-webkit-scrollbar { height: 8px; }
         .chart-scroll-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .chart-scroll-container::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
-        
+
         .table-scroll-container {
             position: relative;
             width: 100%;
@@ -193,18 +186,18 @@
             background: white;
             max-height: 70vh;
         }
-        
+
         .table-scroll-container::-webkit-scrollbar { height: 8px; width: 8px; }
         .table-scroll-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .table-scroll-container::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
-        
+
         .dashboard-table {
             width: 100%;
             min-width: 800px;
             margin-bottom: 0;
             border-collapse: collapse;
         }
-        
+
         .dashboard-table thead th {
             background-color: var(--primary-color);
             color: white;
@@ -215,16 +208,16 @@
             top: 0;
             z-index: 10;
         }
-        
+
         .dashboard-table tbody td {
             padding: 10px;
             font-size: 0.85rem;
             border-bottom: 1px solid #e0e0e0;
             white-space: nowrap;
         }
-        
+
         .dashboard-table tbody tr:hover { background-color: #f8f9fa; }
-        
+
         .badge-paper1 {
             background-color: var(--primary-color);
             color: white;
@@ -235,7 +228,7 @@
             min-width: 50px;
             text-align: center;
         }
-        
+
         .badge-paper2 {
             background-color: var(--success-color);
             color: white;
@@ -246,7 +239,7 @@
             min-width: 50px;
             text-align: center;
         }
-        
+
         .badge-paper3 {
             background-color: var(--warning-color);
             color: #333;
@@ -257,13 +250,13 @@
             min-width: 50px;
             text-align: center;
         }
-        
+
         .chart-container { position: relative; height: 250px; width: 100%; }
         canvas { max-width: 100%; height: auto; }
-        
+
         .action-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
         .action-buttons .btn { flex: 1; min-width: 120px; }
-        
+
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -277,7 +270,7 @@
             z-index: 9999;
             flex-direction: column;
         }
-        
+
         .loading-spinner {
             background: white;
             padding: 30px;
@@ -285,7 +278,7 @@
             text-align: center;
             min-width: 250px;
         }
-        
+
         .loading-spinner .spinner {
             width: 50px;
             height: 50px;
@@ -295,36 +288,39 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .time-elapsed { font-size: 12px; color: #666; margin-top: 10px; }
         .alert { border-radius: 10px; font-size: 0.9rem; }
-        
+
         @media (max-width: 768px) {
             body { padding: 10px; }
             .card-header { padding: 12px 15px; }
             .card-header h2 { font-size: 1.1rem; }
             .card-body { padding: 15px; }
+            .stat-number { font-size: 22px; }
+            .stat-label { font-size: 0.75rem; }
+            .stat-card i { font-size: 1.5rem; }
             .stat-number { font-size: 18px; }
             .stat-label { font-size: 0.7rem; }
             .stat-card i { font-size: 1.2rem; }
             .dashboard-table thead th { padding: 8px 6px; font-size: 0.75rem; }
             .dashboard-table tbody td { padding: 8px 6px; font-size: 0.75rem; }
             .chart-wrapper { min-width: 500px; height: 250px; }
-            .back-link { font-size: 14px; padding: 8px 15px; }
         }
-        
+
         @media (max-width: 480px) {
+            .stat-number { font-size: 18px; }
             .stat-number { font-size: 16px; }
             .action-buttons { flex-direction: column; }
             .action-buttons .btn { width: 100%; }
             .chart-wrapper { min-width: 400px; height: 220px; }
         }
-        
+
         .footer {
             text-align: center;
             margin-top: 20px;
@@ -334,26 +330,39 @@
             background: rgba(0, 0, 0, 0.2);
             border-radius: 15px;
         }
-        
+
         .checkbox-group { margin: 15px 0; }
         .row { margin-right: -8px; margin-left: -8px; }
         .row > [class*="col-"] { padding-right: 8px; padding-left: 8px; }
         .teacher-column { max-width: 200px; white-space: normal !important; word-break: break-word; }
         .scroll-hint { text-align: center; font-size: 11px; color: #999; margin-top: 8px; display: none; }
-        
+
         @media (max-width: 768px) { .scroll-hint { display: block; } }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Login Section -->
+        <div id="loginSection" class="login-card">
+            <div class="card">
+                <div class="card-header text-center">
+                    <i class="fas fa-chalkboard-teacher" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                    <h2>Lunzu Secondary School</h2>
+                    <p class="mb-0">Examination Dashboard</p>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Enter your teacher code to access the dashboard
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacherCode"><i class="fas fa-key"></i> Teacher Code:</label>
+                        <input type="password" id="teacherCode" class="form-control" placeholder="Enter your teacher code" autocomplete="off">
         <div id="loginSection">
-            <!-- Back Link to Teachers Portal - White Font -->
-            <div style="text-align: center;">
-                <a href="https://lunzusec.github.io/School_results/teachers-portal.html" class="back-link">
-                    <i class="fas fa-arrow-left"></i> Back to Teachers Portal
-                </a>
-            </div>
+            <!-- Back Link to Teachers Portal -->
+            <a href="https://lunzusec.github.io/School_results/teachers-portal.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Teachers Portal
+            </a>
             
             <div class="login-card">
                 <div class="card">
@@ -362,6 +371,10 @@
                         <h2>Lunzu Secondary School</h2>
                         <p class="mb-0">Examination Dashboard</p>
                     </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="showPassword">
+                        <label for="showPassword" class="ms-2">Show Teacher Code</label>
                     <div class="card-body">
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle"></i> Enter your teacher code to access the dashboard
@@ -383,12 +396,20 @@
                         
                         <div id="loginMessage" class="mt-3"></div>
                     </div>
+                    
+                    <button id="loginBtn" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Access Dashboard
+                    </button>
+                    
+                    <div id="loginMessage" class="mt-3"></div>
                 </div>
             </div>
         </div>
-        
+
+        <!-- Dashboard Section -->
         <!-- Dashboard Section (Hidden until login) -->
         <div id="dashboardSection" style="display: none;">
+            <!-- Header Stats Row -->
             <!-- Navigation Bar with Logout -->
             <nav class="navbar-custom">
                 <div class="d-flex justify-content-between align-items-center">
@@ -401,8 +422,9 @@
                 </div>
             </nav>
             
-            <!-- Header Stats Row - Showing Paper 1, Paper 2, Paper 3 -->
+            <!-- Header Stats Row - Now showing Paper 1, Paper 2, Paper 3 -->
             <div class="row mb-3">
+                <div class="col-6 col-md-3 mb-2">
                 <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
                         <i class="fas fa-chalkboard" style="color: var(--primary-color);"></i>
@@ -410,6 +432,7 @@
                         <div class="stat-label">Total Classes</div>
                     </div>
                 </div>
+                <div class="col-6 col-md-3 mb-2">
                 <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
                         <i class="fas fa-book" style="color: var(--success-color);"></i>
@@ -417,15 +440,20 @@
                         <div class="stat-label">Total Subjects</div>
                     </div>
                 </div>
+                <div class="col-6 col-md-3 mb-2">
                 <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
+                        <i class="fas fa-file-pdf" style="color: var(--danger-color);"></i>
                         <i class="fas fa-file-pdf" style="color: #1a73e8;"></i>
                         <div class="stat-number" id="totalPaper1">0</div>
+                        <div class="stat-label">Paper 1 Scripts</div>
                         <div class="stat-label">Paper 1</div>
                     </div>
                 </div>
+                <div class="col-6 col-md-3 mb-2">
                 <div class="col-6 col-md-4 col-lg-2 mb-2">
                     <div class="stat-card">
+                        <i class="fas fa-file-alt" style="color: var(--warning-color);"></i>
                         <i class="fas fa-file-alt" style="color: #28a745;"></i>
                         <div class="stat-number" id="totalPaper2">0</div>
                         <div class="stat-label">Paper 2</div>
@@ -446,21 +474,23 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Action Buttons -->
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="action-buttons">
                         <button id="refreshBtn" class="btn btn-primary">
+                            <i class="fas fa-sync-alt"></i> Refresh
                             <i class="fas fa-sync-alt"></i> Refresh Data
                         </button>
                         <button id="downloadPdfBtn" class="btn btn-success">
+                            <i class="fas fa-download"></i> Download PDF
                             <i class="fas fa-download"></i> Download PDF Report
                         </button>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Charts Row -->
             <div class="row mb-3">
                 <div class="col-12 col-md-6 mb-3">
@@ -493,7 +523,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Data Table -->
             <div class="card">
                 <div class="card-header">
@@ -515,38 +545,38 @@
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
-                                <tr><td colspan="8" class="text-center">Loading...<\/td><\/tr>
+                                <tr><td colspan="8" class="text-center">Loading...</td></tr>
                             </tbody>
-                        <\/table>
-                    <\/div>
-                <\/div>
-            <\/div>
-        <\/div>
-        
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         <div class="footer">
             <p>&copy; <span id="currentYear"></span> Lunzu Secondary School - Examination Department</p>
             <p><i class="fas fa-shield-alt"></i> Secure system for authorized teachers only | <i class="fas fa-chart-line"></i> Real-time Dashboard</p>
-        <\/div>
-    <\/div>
-    
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
     <div id="loadingOverlay" style="display: none;" class="loading-overlay">
         <div class="loading-spinner">
             <div class="spinner"></div>
             <div id="loadingMessage">Loading data...</div>
             <div class="time-elapsed" id="timeElapsed">Elapsed: 0 seconds</div>
-        <\/div>
-    <\/div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         // ============================================
         // CONFIGURATION - UPDATE THIS URL
         // ============================================
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSdL3OC7QSc2z5Eis47q6Q7dKQzE12eBaqB-i67igJmF26mzm1empfQUmQ03QdwSPkwQ/exec";
-        
+
         // Global variables
         let currentTeacherCode = null;
         let currentReportData = null;
@@ -556,7 +586,7 @@
         let cachedData = null;
         let cacheTime = null;
         const CACHE_DURATION = 60000;
-        
+
         // DOM Elements
         const loginSection = document.getElementById('loginSection');
         const dashboardSection = document.getElementById('dashboardSection');
@@ -571,18 +601,18 @@
         const loadingMessage = document.getElementById('loadingMessage');
         const timeElapsedSpan = document.getElementById('timeElapsed');
         const chartScrollContainer = document.getElementById('chartScrollContainer');
-        
+
         let startTime = null;
         let elapsedInterval = null;
-        
+
         // Update copyright year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
+
         // Show/hide password
         showPasswordCheckbox.addEventListener('change', function() {
             teacherCodeInput.type = this.checked ? 'text' : 'password';
         });
-        
+
         // Logout function
         function logout() {
             currentTeacherCode = null;
@@ -607,31 +637,31 @@
             }, 1000);
             loadingOverlay.style.display = 'flex';
         }
-        
+
         function hideLoading() {
             if (elapsedInterval) clearInterval(elapsedInterval);
             loadingOverlay.style.display = 'none';
             return Math.floor((Date.now() - startTime) / 1000);
         }
-        
+
         function callAppsScript(action, teacherCode, timeout = 60000) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 const url = `${APPS_SCRIPT_URL}?action=${action}&teacherCode=${encodeURIComponent(teacherCode)}&callback=${callbackName}&t=${Date.now()}`;
-                
+
                 const timeoutId = setTimeout(() => {
                     if (window[callbackName]) delete window[callbackName];
                     if (script.parentNode) script.parentNode.removeChild(script);
                     reject(new Error('Request timeout'));
                 }, timeout);
-                
+
                 window[callbackName] = function(data) {
                     clearTimeout(timeoutId);
                     delete window[callbackName];
                     if (script.parentNode) script.parentNode.removeChild(script);
                     resolve(data);
                 };
-                
+
                 const script = document.createElement('script');
                 script.src = url;
                 script.onerror = function() {
@@ -643,7 +673,7 @@
                 document.body.appendChild(script);
             });
         }
-        
+
         async function loadDashboardData(forceRefresh = false) {
             if (!forceRefresh && cachedData && cacheTime && (Date.now() - cacheTime) < CACHE_DURATION) {
                 currentReportData = cachedData;
@@ -651,18 +681,18 @@
                 updateDashboard();
                 return;
             }
-            
+
             showLoading('Loading dashboard data...');
-            
+
             try {
                 const result = await callAppsScript('getDashboardData', currentTeacherCode, 90000);
                 if (!result.success) throw new Error(result.error);
-                
+
                 currentReportData = result.data;
                 groupedSubjects = currentReportData.groupedSubjects;
                 cachedData = currentReportData;
                 cacheTime = Date.now();
-                
+
                 updateDashboard();
                 const elapsed = hideLoading();
                 showTemporaryMessage(loginMessage, `Dashboard loaded in ${elapsed} seconds!`, 'success');
@@ -671,28 +701,29 @@
                 showMessage(loginMessage, 'Error: ' + error.message, 'danger');
             }
         }
-        
+
         function showTemporaryMessage(element, text, type) {
             if (!element) return;
             element.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show">${text}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
             setTimeout(() => { if (element.innerHTML.includes(text)) element.innerHTML = ''; }, 4000);
         }
-        
+
         function showMessage(element, text, type) {
             if (!element) return;
             element.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show">${text}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
         }
-        
+
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
-        
+
         function updateDashboard() {
             if (!currentReportData) return;
-            
+
+            // Update stats
             // Update stats - including Paper 2 and Paper 3
             document.getElementById('totalClasses').textContent = currentReportData.stats.totalClasses;
             document.getElementById('totalSubjects').textContent = groupedSubjects.length;
@@ -700,45 +731,49 @@
             document.getElementById('totalPaper2').textContent = currentReportData.stats.totalPaper2;
             document.getElementById('totalPaper3').textContent = currentReportData.stats.totalPaper3;
             document.getElementById('totalScripts').textContent = currentReportData.stats.totalScripts;
-            
+
             // Update table
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
-            
+
             currentReportData.items.forEach((item, index) => {
                 const total = (item.paper1 || 0) + (item.paper2 || 0) + (item.paper3 || 0);
                 const row = tableBody.insertRow();
                 row.innerHTML = `
-                    <td style="text-align: center;">${index + 1}<\/td>
-                    <td><strong>${escapeHtml(item.className)}<\/strong><\/td>
-                    <td>${escapeHtml(item.subject)}<\/td>
-                    <td class="teacher-column">${escapeHtml(item.teachers)}<\/td>
-                    <td style="text-align: center;"><span class="badge-paper1">${item.paper1 || '-'}<\/span><\/td>
-                    <td style="text-align: center;"><span class="badge-paper2">${item.paper2 || '-'}<\/span><\/td>
-                    <td style="text-align: center;"><span class="badge-paper3">${item.paper3 || '-'}<\/span><\/td>
-                    <td style="text-align: center;"><strong>${total}<\/strong><\/td>
+                    <td style="text-align: center;">${index + 1}</td>
+                    <td><strong>${escapeHtml(item.className)}</strong></td>
+                    <td>${escapeHtml(item.subject)}</td>
+                    <td class="teacher-column">${escapeHtml(item.teachers)}</td>
+                    <td style="text-align: center;"><span class="badge-paper1">${item.paper1 || '-'}</span></td>
+                    <td style="text-align: center;"><span class="badge-paper2">${item.paper2 || '-'}</span></td>
+                    <td style="text-align: center;"><span class="badge-paper3">${item.paper3 || '-'}</span></td>
+                    <td style="text-align: center;"><strong>${total}</strong></td>
                 `;
             });
-            
+
             updateCharts();
         }
-        
+
         function updateCharts() {
             if (!groupedSubjects) return;
-            
+
+            // Prepare data for grouped subjects chart (each subject once)
             const subjectLabels = groupedSubjects.map(item => 
                 item.subject.length > 25 ? item.subject.substring(0, 22) + '...' : item.subject
             );
             const subjectTotals = groupedSubjects.map(item => item.total);
-            
+
+            // Calculate dynamic width
             const chartWrapper = document.querySelector('.chart-wrapper');
             const barWidth = 55;
             const minWidth = Math.max(500, subjectLabels.length * barWidth);
             if (chartWrapper) chartWrapper.style.minWidth = minWidth + 'px';
-            
+
+            // Destroy existing chart
             if (subjectsChart) subjectsChart.destroy();
             if (papersChart) papersChart.destroy();
-            
+
+            // Create grouped subjects chart
             const subjectsCtx = document.getElementById('subjectsChart').getContext('2d');
             subjectsChart = new Chart(subjectsCtx, {
                 type: 'bar',
@@ -779,7 +814,8 @@
                     }
                 }
             });
-            
+
+            // Create papers distribution chart
             const papersCtx = document.getElementById('papersChart').getContext('2d');
             papersChart = new Chart(papersCtx, {
                 type: 'pie',
@@ -813,7 +849,7 @@
                 }
             });
         }
-        
+
         async function downloadPDF() {
             downloadPdfBtn.disabled = true;
             downloadPdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating...';
@@ -833,21 +869,22 @@
                 showMessage(loginMessage, 'PDF Error: ' + error.message, 'danger');
             } finally {
                 downloadPdfBtn.disabled = false;
+                downloadPdfBtn.innerHTML = '<i class="fas fa-download"></i> Download PDF';
                 downloadPdfBtn.innerHTML = '<i class="fas fa-download"></i> Download PDF Report';
             }
         }
-        
+
         async function login() {
             const teacherCode = teacherCodeInput.value.trim();
             if (!teacherCode) {
                 showMessage(loginMessage, 'Please enter your teacher code.', 'danger');
                 return;
             }
-            
+
             loginBtn.disabled = true;
             loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Verifying...';
             showLoading('Verifying teacher code...');
-            
+
             try {
                 const result = await callAppsScript('verify', teacherCode, 30000);
                 hideLoading();
@@ -857,6 +894,7 @@
                     dashboardSection.style.display = 'block';
                     await loadDashboardData(false);
                 } else {
+                    showMessage(loginMessage, 'Invalid teacher code.', 'danger');
                     showMessage(loginMessage, 'Invalid teacher code. Please try again.', 'danger');
                 }
             } catch (error) {
@@ -867,7 +905,7 @@
                 loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Access Dashboard';
             }
         }
-        
+
         // Drag to scroll for chart
         if (chartScrollContainer) {
             let isDragging = false, startX, scrollLeft;
@@ -894,13 +932,13 @@
             });
             chartScrollContainer.style.cursor = 'grab';
         }
-        
+
         // Event listeners
         loginBtn.addEventListener('click', login);
         if (logoutBtn) logoutBtn.addEventListener('click', logout);
         refreshBtn.addEventListener('click', () => loadDashboardData(true));
         downloadPdfBtn.addEventListener('click', downloadPDF);
         teacherCodeInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
-    <\/script>
-<\/body>
-<\/html>
+    </script>
+</body>
+</html>
